@@ -11,5 +11,5 @@ def twopBVP(f_vec, alpha, beta, L, N):
     bc = [-alpha] + [0]*(N-2) + [-beta]
     Y = (inv(T_times_delta_x) @ (f_vec*delta_x_squared + bc))
     
-    return np.concatenate(([alpha], Y, [beta]))
+    return Y
     
