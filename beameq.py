@@ -14,5 +14,4 @@ beta = 0
 print(x.size)
 M = twopBVP(x*q, alpha, beta, L, N)
 u = [alpha] + list(twopBVP(M/(E*I), alpha, beta, L, N)) + [beta]
-plt.plot([0]+list(x)+[L], u)
-plt.show()
+print(u[500])
