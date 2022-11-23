@@ -14,4 +14,4 @@ beta = 0
 print(x.size)
 M = twopBVP(x*q, alpha, beta, L, N)
 u = [alpha] + list(twopBVP(M/(E*I), alpha, beta, L, N)) + [beta]
-print(u[500])
+print(u[500]) #obs fett fel
