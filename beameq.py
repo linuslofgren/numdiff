@@ -12,6 +12,6 @@ alpha = 0
 beta = 0
 
 print(x.size)
-M = twopBVP(x*q, alpha, beta, L, N)
+M = twopBVP(np.ones(len(x))*q, alpha, beta, L, N)
 u = [alpha] + list(twopBVP(M/(E*I), alpha, beta, L, N)) + [beta]
-print(u[500]) #obs fett fel
+print(u[500]) #obs fett fel, kanske 11.741059085875692 [mm] 
