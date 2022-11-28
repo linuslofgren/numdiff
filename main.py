@@ -10,7 +10,8 @@ def test_error_sin():
     L = math.pi
     
     error = []
-    for N in range(10, 100):
+    n_range = 2**np.arange(2, 14)
+    for N in n_range:
         x = np.linspace(0, L, N+2)
         delta_x = L/(N+1)
         y_2 = -np.sin(x)
@@ -19,8 +20,11 @@ def test_error_sin():
         res = [alpha]+list(twopBVP(y_2[1:-1], 0, 0, L, N))+[beta]
         error += [np.sqrt(delta_x)*linalg.norm(np.sin(x) - res)]
         
-    plt.loglog([L/(N+1) for N in range(10, 100)], error)
-    plt.loglog([L/(N+1) for N in range(10, 100)], [(L/(N+1))**2 for N in range(10, 100)])
+    plt.loglog([L/(N+1) for N in n_range], error, label="$||\ell||_{rms}$")
+    plt.loglog([L/(N+1) for N in n_range], [(L/(N+1))**2 for N in n_range], label="$\mathcal{O}(\Delta x^2)$")
+    plt.ylabel("Root mean square error")
+    plt.xlabel("$\Delta x$")
+    plt.legend()
     plt.show()
 
 def SE0():
@@ -38,12 +42,12 @@ def SE0():
 def SEV():
     N = 99
     x = np.linspace(0+1/(N+1), 1-1/(N+1), N)
-   #V = 700*(0.5-np.abs(x-0.5))
+    # V = 700*(0.5-np.abs(x-0.5))
     V = 800*np.sin(np.pi*x)**2
     #V = 800*np.sin(np.pi*2*x)**2       #triplet
 
     energies, wave, idx = SE(V, N)
-    c = 1000
+    c = 2000
     d = 1
     pd = c*wave**2+np.abs(energies)
     wavelevel = c*wave + np.abs(energies)
@@ -56,4 +60,4 @@ def SEV():
 
 
 if __name__ == "__main__":
-    SEV()
+    test_error_sin()
