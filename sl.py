@@ -1,6 +1,6 @@
 from twopBVP import twopBVP
 from scipy import sparse
-from scipy.linalg import toeplitz, inv
+from scipy.linalg import toeplitz, inv, norm
 from scipy.sparse.linalg import eigs, eigsh
 from scipy.linalg import eig, eigh_tridiagonal
 import scipy.linalg as linalg
@@ -42,14 +42,22 @@ def SL(N, L, alpha, beta, approach=1):
     # sorted_indexes = l.argsort()[::-1]
     # l, u = (1/delta_x_squared) * l, (1/delta_x_squared) * u
 
-    l, u = eigh_tridiagonal(np.hstack((2*np.ones(N-1), 1)), -1*np.ones(N-1), select="i", select_range=(0,nbr_eig))
+    l, u = eigh_tridiagonal(
+        np.hstack((2*np.ones(N-1), 1)),
+        -1*np.ones(N-1),
+        select="i",
+        select_range=(0,nbr_eig)
+    )
     sorted_indexes = l.argsort()#[::-1]
-    l, u = -1*(1/delta_x_squared) * l, (1/delta_x_squared) * u
-
+    l, u = -1*(1/delta_x_squared) * l, -1*(1/delta_x_squared) * u
+    
     # Approach 2
     u = np.vstack(([alpha]*u.shape[1], u))
     u = np.vstack((u, u_1(u)))
 
+    # Normalize
+    for i in range(u.shape[1]):
+        u[:,i] /= norm(u[:,i])
     # Approach 3
     # u = np.vstack((u, 1/3*(2*beta+4*u[-1,:]-u[-2,:])))
     
@@ -65,8 +73,11 @@ N = 499
 l, u, idx = SL(N, 1, 0, 0)
 x = np.linspace(0, 1, u.shape[0])
 print("First three eigenvalues: \n", l[idx[0]], l[idx[1]], l[idx[2]]) # (-2.4673990672394255+0j) (-22.206445196618926+0j) (-61.68375662939049+0j)
-for i in range(1,4):
-    plt.plot(x, -4.5*u[:,idx[i]])
+for i in range(0,3):
+    plt.plot(x, -4.5*u[:,idx[i]], label=f"$u_{i+1}$")
+plt.legend()
+plt.xlabel("x")
+plt.ylabel("y")
 plt.show()
 
 def l_eig(j, L=1):
@@ -85,10 +96,10 @@ for N in n_range:
 plt.loglog([x for x in n_range], errors, "1", label="$\lambda_{\Delta x 1}-\lambda_1$")
 plt.loglog([x for x in n_range], errors, "2", label="$\lambda_{\Delta x 2}-\lambda_2$")
 plt.loglog([x for x in n_range], errors, "3", label="$\lambda_{\Delta x 3}-\lambda_3$")
-plt.loglog([x for x in n_range], [2/3*(x)**-2 for x in n_range], label="$\mathcal{O}(\Delta x^2)$")
+plt.loglog([x for x in n_range], [(x)**-2 for x in n_range], label="$\mathcal{O}(\Delta x^2)$")
 plt.legend()
 # plt.xlabel(f"N ({','.join(map(str, n_range.astype(int)))})")
 plt.xlabel("N")
-plt.ylabel("$\lambda_{\Delta x}-\lambda$ error")
+plt.ylabel("Eigenvalue error")
 plt.xscale('log', base=2)
 plt.show()

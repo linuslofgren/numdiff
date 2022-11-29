@@ -15,3 +15,7 @@ print(x.size)
 M = twopBVP(np.ones(len(x))*q, alpha, beta, L, N)
 u = [alpha] + list(twopBVP(M/(E*I), alpha, beta, L, N)) + [beta]
 print(u[500]) #obs fett fel, kanske -0.011741059085880013 i oklar enhet
+plt.plot(np.hstack((0, x, L)), u)
+plt.ylabel("Deflection [m]")
+plt.xlabel("x [m]")
+plt.show()

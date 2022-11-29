@@ -1,12 +1,6 @@
-from twopBVP import twopBVP
-from scipy import sparse
-from scipy.linalg import toeplitz, inv
-from scipy.sparse.linalg import eigs
-from scipy.linalg import eig, eigh
-import scipy.linalg as linalg
+from scipy.linalg import toeplitz
+from scipy.linalg import eig
 import numpy as np
-import time
-import matplotlib.pyplot as plt
 
 def SE(V, N):
     delta_x = 1/(N+1)

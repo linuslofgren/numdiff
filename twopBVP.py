@@ -1,8 +1,6 @@
 from scipy import sparse
 from scipy.linalg import toeplitz
-from scipy.sparse.linalg import inv, spsolve_triangular, spsolve
-import numpy as np
-
+from scipy.sparse.linalg import spsolve
 
 def twopBVP(f_vec, alpha, beta, L, N):
     delta_x = L/(N+1)
@@ -11,4 +9,3 @@ def twopBVP(f_vec, alpha, beta, L, N):
     bc = [-alpha] + [0]*(N-2) + [-beta]
     Y = spsolve(T_times_delta_x, (f_vec*delta_x_squared + bc))
     return Y
-    
