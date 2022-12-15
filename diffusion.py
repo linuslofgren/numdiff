@@ -4,8 +4,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-# def euler_step(Tdx, u_old, dt):
-#     return u_old + dt * (Tdx @ u_old)
+def euler_step(Tdx, u_old, dt):
+    return u_old + dt * (Tdx @ u_old)
 
 def tr_step(Tdx, u_old, dt):
     lhs = np.eye(Tdx.shape[0]) - dt/2 * Tdx
@@ -13,7 +13,7 @@ def tr_step(Tdx, u_old, dt):
     return solve(lhs, rhs)
 
 if __name__ == "__main__":
-    N = 41
+    N = 20
     L = 1
     u = 10*(1-np.abs(2*(np.linspace(0, L, N)-1/2)))
     # u = np.sin(np.linspace(0, L, N))
@@ -23,8 +23,8 @@ if __name__ == "__main__":
     u_max = np.max(u)
     t_end = 1
     # M = int(1e3*1.406) # Small violation
-    # M = 100
-    M = int(u_max/(delta_x)**2/t_end)
+    M = 857
+    # M = int(u_max/(delta_x)**2/t_end)
     delta_t = t_end/(M)
     alpha = 0
     beta = 0
@@ -38,7 +38,7 @@ if __name__ == "__main__":
     us = [u]
 
     for i in range(M):
-        n = [alpha]+list(tr_step(T, us[-1], delta_t))[1:-1]+[beta]
+        n = [alpha]+list(euler_step(T, us[-1], delta_t))[1:-1]+[beta]
         us.append(n)
 
     xx = np.linspace(0,1,N)

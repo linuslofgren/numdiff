@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from diffusion import tr_step
 
-d = 0.1
-a = 0
+d = 0.001
+a = 1
 N = max(int(abs(a/(2*d))), 100)
 dx = 1/N
 print(dx)
